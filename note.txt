@@ -1,2 +1,26 @@
+ENV AT GOLANG TO CONNECT W POSTGRES
+DBHOST="postgres://postgres:1m4dm1n@192.168.5.216:5432/grafana?sslmode=disable"
+
+CONNECT TO POSTGRES, AT MIDDLEWARE (HANDLERS.GO)
+// Open the connection
+	db, err := sql.Open("postgres", os.Getenv("DBHOST"))
+
+MAKE A TABLE IN POSTGRES
+CREATE TABLE users (
+    userid SERIAL PRIMARY KEY,
+    name TEXT,
+    age INT,
+    location TEXT
+);
+
+FOR CHECKING ENV IN VS CODE
+GO TO CONSOLE IN VS CODE AND RUN  process.env['PATH']
+
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
+
+TO LOGIN POSTGRES IN DIFFERENT COMP
+psql -h 192.168.5.216 -p 5432 -d grafana -U postgres -W
+
 Make a grafana plugin
 go to data/plugins
+
