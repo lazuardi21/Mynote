@@ -1,3 +1,19 @@
+ACCESS SELECT * FROM WITH ANOTHER COMPUTER IN INFLUXDB
+curl -G "http://192.168.5.216:8086/query?db=demo" --data-urlencode "q=SELECT * FROM "computer2""
+
+EXPORT FROM DATABASE TO CSV AND VISE VERSA TO INFLUXDB
+go get -v github.com/jpillora/csv-to-influxdb
+csv-to-influxdb -s http://localhost:8086 -d demo -m computer -t value -n D:\Work\PLN\demo.csv
+
+
+EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
+\copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
+\copy "household_poer_consumption" FROM 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (IMPORT)
+pg_dump -U postgres -h 192.168.5.216 -p 5432 --table=household_poer_consumption grafana > > dumpFile.sql
+
+RUN SQL QUERY IN REMOTE SERVER
+psql -h host -U username -d myDataBase -a -f myInsertFile
+
 ENV AT GOLANG TO CONNECT W POSTGRES
 DBHOST="postgres://postgres:1m4dm1n@192.168.5.216:5432/grafana?sslmode=disable"
 
