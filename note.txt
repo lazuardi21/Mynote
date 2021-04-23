@@ -1,10 +1,22 @@
+SELECT ABS(SUM(Global_active_power)) AS Active_power FROM Data WHERE $timeFilter GROUP BY time(1m)
+SELECT mean("value") FROM "cpu" WHERE $timeFilter GROUP BY time($__interval) fill(null) ORDER BY time DESC
+SELECT mean("value") FROM "cpu" WHERE time >= now() - 30m GROUP BY time(10s) fill(null) ORDER BY time DESC
+Select time, Global_active_power from Data  where $timeFilter order by asc
+SELECT ABS(SUM(Global_active_power)) as Global_active_power FROM Data WHERE time >= '2006-12-16 17:24:00' and time <= '2006-12-16 17:28:00'GROUP BY time(1m)
+
+Select time, Global_active_power from Data  where time >= '2006-12-16 17:24:00' and time <= '2006-12-16 17:28:00' order by asc
+
+show field keys from Asset_Data
+to_date(to_char("Date_time", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS time,
+influxd run -config E:\InfluxDB\influxdb-1.8.4-1\influxdb.conf
+
 ACCESS SELECT * FROM WITH ANOTHER COMPUTER IN INFLUXDB
 curl -G "http://192.168.5.216:8086/query?db=demo" --data-urlencode "q=SELECT * FROM "computer2""
+curl -XPOST "http://192.168.5.216:8086/query?db=demo" --data-urlencode "q=DROP MEASUREMENT "computer2""
 
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO INFLUXDB
 go get -v github.com/jpillora/csv-to-influxdb
-csv-to-influxdb -s http://localhost:8086 -d demo -m computer -t value -n D:\Work\PLN\demo.csv
-
+csv-to-influxdb -s http://192.168.5.216:8086 -d Grafana -m Asset_Data -t Id --timestamp-column Date_time -b 9999999 -h 99999999 -n -f D:\Work\PLN\demo.csv
 
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
 \copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
