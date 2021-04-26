@@ -1,7 +1,15 @@
-SELECT ABS(SUM(Global_active_power)) AS Active_power FROM Data WHERE $timeFilter GROUP BY time(1m)
+SELECT mean("load_power") AS "load" FROM "power_readings"  WHERE $timeFilter GROUP BY time(1h) fill(0)
+
+=REPLACE(TEXT(B7348,"YYYY-MM-DD HH:MM:SS"),18,2,"00")
+
+SELECT ABS(SUM(Global_active_power)) AS Active_power FROM Data WHERE $timeFilter GROUP BY time(1h)
+SELECT ABS(SUM(Global_reactive_power)) AS Reactive_power FROM Data WHERE $timeFilter GROUP BY time(1h)
+
 SELECT mean("value") FROM "cpu" WHERE $timeFilter GROUP BY time($__interval) fill(null) ORDER BY time DESC
 SELECT mean("value") FROM "cpu" WHERE time >= now() - 30m GROUP BY time(10s) fill(null) ORDER BY time DESC
 Select time, Global_active_power from Data  where $timeFilter order by asc
+
+SELECT ABS(SUM(Global_active_power)) as Global_active_power FROM Data WHERE time >= '2006-12-16 17:24:00' and time <= '2006-12-16 17:28:00'GROUP BY time(1m)
 SELECT ABS(SUM(Global_active_power)) as Global_active_power FROM Data WHERE time >= '2006-12-16 17:24:00' and time <= '2006-12-16 17:28:00'GROUP BY time(1m)
 
 Select time, Global_active_power from Data  where time >= '2006-12-16 17:24:00' and time <= '2006-12-16 17:28:00' order by asc
