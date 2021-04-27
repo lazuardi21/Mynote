@@ -1,3 +1,10 @@
+
+QUERY MASS UPLOAD FROM EXCEL TO POSTGRES
+=CONCATENATE("INSERT INTO ""PLN_Data""(""time"",""asset_id"",""voltage_volt"",""current_ampere"",""frequency_hz"",""power_factor"",""power_kwatt"",""energy_kwh"") VALUES(","'",H2,"'",",","'",G2,"'",",","'",A2,"'",",","'",B2,"'",",","'",C2,"'",",","'",D2,"'",",","'",E2,"'",",","'",F2,"'",");")
+
+COPY PASTE MEASUREMENT
+SELECT * INTO ZZZD FROM P4978 group by *
+
 SELECT mean("load_power") AS "load" FROM "power_readings"  WHERE $timeFilter GROUP BY time(1h) fill(0)
 
 =REPLACE(TEXT(B7348,"YYYY-MM-DD HH:MM:SS"),18,2,"00")
@@ -19,8 +26,8 @@ to_date(to_char("Date_time", 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') 
 influxd run -config E:\InfluxDB\influxdb-1.8.4-1\influxdb.conf
 
 ACCESS SELECT * FROM WITH ANOTHER COMPUTER IN INFLUXDB
-curl -G "http://192.168.5.216:8086/query?db=demo" --data-urlencode "q=SELECT * FROM "computer2""
-curl -XPOST "http://192.168.5.216:8086/query?db=demo" --data-urlencode "q=DROP MEASUREMENT "computer2""
+curl -G "http://192.168.5.216:8086/query?db=Grafana" --data-urlencode "q=SELECT * FROM "EMS""
+curl -XPOST "http://192.168.5.216:8086/query?db=Grafana" --data-urlencode "q=DROP MEASUREMENT "EMS""
 
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO INFLUXDB
 go get -v github.com/jpillora/csv-to-influxdb
@@ -32,7 +39,7 @@ EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
 pg_dump -U postgres -h 192.168.5.216 -p 5432 --table=household_poer_consumption grafana > > dumpFile.sql
 
 RUN SQL QUERY IN REMOTE SERVER
-psql -h host -U username -d myDataBase -a -f myInsertFile
+psql -h 192.168.5.216 -U postgres -d grafana -a -f D:\Work\PLN\PLN_January_2021
 
 ENV AT GOLANG TO CONNECT W POSTGRES
 DBHOST="postgres://postgres:1m4dm1n@192.168.5.216:5432/grafana?sslmode=disable"
