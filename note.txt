@@ -35,7 +35,7 @@ csv-to-influxdb -s http://192.168.5.216:8086 -d Grafana -m Asset_Data -t Id --ti
 
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
 \copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
-\copy "household_poer_consumption" FROM 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (IMPORT)
+\copy "EMS_HIERARCHY"(asset_id,parent_id,asset_name,description,enabled) FROM 'D:\Work\PLN\EMS_HIERARCHY.csv' DELIMITER ',' CSV HEADER;(IMPORT)
 pg_dump -U postgres -h 192.168.5.216 -p 5432 --table=household_poer_consumption grafana > > dumpFile.sql
 
 RUN SQL QUERY IN REMOTE SERVER
