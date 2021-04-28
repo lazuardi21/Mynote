@@ -9,6 +9,8 @@ SELECT mean("load_power") AS "load" FROM "power_readings"  WHERE $timeFilter GRO
 
 =REPLACE(TEXT(B7348,"YYYY-MM-DD HH:MM:SS"),18,2,"00")
 
+SELECT ABS(SUM(current_ampere)) AS current_ampere FROM EMS_2 WHERE time >= '2021-01-01 00:00:00' and time <= '2021-01-01 00:10:00' GROUP BY asset_id
+
 SELECT ABS(SUM(Global_active_power)) AS Active_power FROM Data WHERE $timeFilter GROUP BY time(1h)
 SELECT ABS(SUM(Global_reactive_power)) AS Reactive_power FROM Data WHERE $timeFilter GROUP BY time(1h)
 
@@ -32,6 +34,7 @@ curl -XPOST "http://192.168.5.216:8086/query?db=Grafana" --data-urlencode "q=DRO
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO INFLUXDB
 go get -v github.com/jpillora/csv-to-influxdb
 csv-to-influxdb -s http://192.168.5.216:8086 -d Grafana -m Asset_Data -t Id --timestamp-column Date_time -b 9999999 -h 99999999 -n -f D:\Work\PLN\demo.csv
+csv-to-influxdb -s http://192.168.5.216:8086 -d Grafana -m Asset_Data2 -t asset_id,no --timestamp-column Time -b 9999999 -h 99999999 -n -f D:\Work\PLN\PLN_January_2021.csv
 
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
 \copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
