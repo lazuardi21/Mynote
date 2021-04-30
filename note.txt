@@ -1,15 +1,25 @@
+REDIRECT TO ANOTHER PAGE
+<form action="http://192.168.5.208:8080/">
+    <input type="submit" value="Call API" />
+</form>
+<input type="button" onclick="location.href='http://192.168.5.208:8080/test/2';" value="Go to Google" />
+
+
+EXTRACT PNG, JPG TO CSV 
+https://extracttable.com/
 
 QUERY MASS UPLOAD FROM EXCEL TO POSTGRES
 =CONCATENATE("INSERT INTO ""PLN_Data""(""time"",""asset_id"",""voltage_volt"",""current_ampere"",""frequency_hz"",""power_factor"",""power_kwatt"",""energy_kwh"") VALUES(","'",H2,"'",",","'",G2,"'",",","'",A2,"'",",","'",B2,"'",",","'",C2,"'",",","'",D2,"'",",","'",E2,"'",",","'",F2,"'",");")
 
 COPY PASTE MEASUREMENT
-SELECT * INTO ZZZD FROM P4978 group by *
+SELECT * INTO EMS_DATA FROM EMS_2 group by *
 
 SELECT mean("load_power") AS "load" FROM "power_readings"  WHERE $timeFilter GROUP BY time(1h) fill(0)
 
 =REPLACE(TEXT(B7348,"YYYY-MM-DD HH:MM:SS"),18,2,"00")
 
 SELECT ABS(SUM(current_ampere)) AS current_ampere FROM EMS_2 WHERE time >= '2021-01-01 00:00:00' and time <= '2021-01-01 00:10:00' GROUP BY asset_id
+SELECT ABS(SUM(current_ampere)) AS current_ampere FROM EMS_2 WHERE time >= '2021-01-01 00:00:00' and time <= '2021-01-01 00:10:00' GROUP BY time(1m)
 
 SELECT ABS(SUM(Global_active_power)) AS Active_power FROM Data WHERE $timeFilter GROUP BY time(1h)
 SELECT ABS(SUM(Global_reactive_power)) AS Reactive_power FROM Data WHERE $timeFilter GROUP BY time(1h)
