@@ -46,6 +46,12 @@ go get -v github.com/jpillora/csv-to-influxdb
 csv-to-influxdb -s http://192.168.5.216:8086 -d Grafana -m Asset_Data -t Id --timestamp-column Date_time -b 9999999 -h 99999999 -n -f D:\Work\PLN\demo.csv
 csv-to-influxdb -s http://192.168.5.216:8086 -d Grafana -m Asset_Data2 -t asset_id,no --timestamp-column Time -b 9999999 -h 99999999 -n -f D:\Work\PLN\PLN_January_2021.csv
 
+COPY PASTE TABLE IN POSTGRES
+CREATE TABLE "EMS_ASSET_ROLE_2" AS TABLE "EMS_ASSET_ROLE" WITH NO DATA;
+
+CHANGE TYPE VARCHAR TO INT POSTGRES
+ALTER TABLE "EMS_ASSET_ROLE_2" ALTER COLUMN user_id TYPE integer USING (user_id::integer);
+
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
 \copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
 \copy "EMS_HIERARCHY"(asset_id,parent_id,asset_name,description,enabled) FROM 'D:\Work\PLN\EMS_HIERARCHY.csv' DELIMITER ',' CSV HEADER;(IMPORT)
