@@ -1,3 +1,24 @@
+RUN TIMESCALE DB IN DOCKER (CMD)
+docker pull timescale/timescaledb:latest-pg12
+docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=1m4dm1n timescale/timescaledb:latest-pg12
+
+CHECK 
+docker ps
+
+RUN POSTGRES IN DOCKER (CMD)
+docker run --name postgres -e POSTGRES_PASSWORD=1m4dm1n -d postgres
+
+MAKE A DB IN DOCKER (CLI DOCKER)
+createdb -U postgres mydb
+
+$ docker exec -ti [db-container] bash
+$ su postgres
+$ psql
+
+START AND STOP POSTGRES
+docker stop postgres1
+docker start postgres1
+
 REDIRECT TO ANOTHER PAGE
 <form action="http://192.168.5.208:8080/">
     <input type="submit" value="Call API" />
