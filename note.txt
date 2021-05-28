@@ -1,3 +1,11 @@
+RUN TIMESCALE IN UBUNTU
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-timescaledb-on-ubuntu-20-04
+
+configure VIM
+https://askubuntu.com/questions/50621/cannot-connect-to-postgresql-on-port-5432
+sudo nano /etc/postgresql/12/main/pg_hba.conf OR sudo vim /etc/postgresql/12/main/pg_hba.conf 
+sudo nano /etc/postgresql/12/main/postgresql.conf OR sudo vim /etc/postgresql/12/main/postgresql.conf
+
 RUN TIMESCALE DB IN DOCKER (CMD)
 docker pull timescale/timescaledb:latest-pg12
 docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=1m4dm1n timescale/timescaledb:latest-pg12
