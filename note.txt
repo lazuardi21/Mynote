@@ -1,9 +1,23 @@
 BACKUP POSTGRESQL DATABASE
 pg_dump -h 192.168.5.216 -p 5432 -U postgres -F c -b -v -f "D:\Work\PLN\Backup\backup.sql" grafana
+
+RESTORE POSTGRESQL DATABASE
 pg_restore -h 192.168.5.190 -p 5432 -U postgres -d grafana -v "D:\Work\PLN\Backup\backup.sql"
+
+CONVERT TO HYPERTABLE 
+CREATE TABLE conditions2 (
+  time        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  device_id   TEXT,
+  temperature  NUMERIC,
+  humidity     NUMERIC
+);
+SELECT create_hypertable('conditions', 'time');
+SELECT create_hypertable('EMS_DATA', 'time');
+
 
 RUN TIMESCALE IN UBUNTU
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-timescaledb-on-ubuntu-20-04
+sudo ufw status verbose
 
 configure VIM
 https://askubuntu.com/questions/50621/cannot-connect-to-postgresql-on-port-5432
