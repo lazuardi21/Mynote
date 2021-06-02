@@ -1,3 +1,18 @@
+ORDER BY MONTH_NAME POSTGRES
+select
+CASE WHEN a.month_no  = '01' then 'January'
+				     WHEN a.month_no = '02' then 'February'
+					 WHEN a.month_no = '03' then 'March' end
+					 AS month_no 
+from
+(select distinct CASE WHEN to_char(to_date(month, 'Mon'), 'mm') = '01' then '01'
+				     WHEN to_char(to_date(month, 'Mon'), 'mm') = '02' then '02'
+					 WHEN to_char(to_date(month, 'Mon'), 'mm') = '03' then '03' end
+					 AS month_no 
+from "EMS_DATA_DETAIL"
+order by 1
+)a
+
 BACKUP POSTGRESQL DATABASE
 pg_dump -h 192.168.5.216 -p 5432 -U postgres -F c -b -v -f "D:\Work\PLN\Backup\backup.sql" grafana
 
@@ -5,15 +20,31 @@ RESTORE POSTGRESQL DATABASE
 pg_restore -h 192.168.5.190 -p 5432 -U postgres -d grafana -v "D:\Work\PLN\Backup\backup.sql"
 
 CONVERT TO HYPERTABLE 
-CREATE TABLE conditions2 (
+CREATE TABLE conditions3 (
   time        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   device_id   TEXT,
   temperature  NUMERIC,
   humidity     NUMERIC
 );
-SELECT create_hypertable('conditions', 'time');
+CREATE TABLE EMS_DATA3 (
+  time        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  asset_id   NUMERIC,
+  voltage_volt  NUMERIC,
+  current_ampere   NUMERIC,
+  frequency_hz  NUMERIC,
+  power_factor   NUMERIC,
+  power_kwatt  NUMERIC,
+  energy_kwh     NUMERIC
+);
+SELECT create_hypertable('conditions4', 'time');
 SELECT create_hypertable('EMS_DATA', 'time');
 
+COPY PASTE IN POSTGRES
+INSERT INTO "EMS_DATA2" ("time", asset_id, voltage_volt, current_ampere, frequency_hz, power_factor, power_kwatt, energy_kwh)
+SELECT "time", asset_id, voltage_volt, current_ampere, frequency_hz, power_factor, power_kwatt, energy_kwh FROM "EMS_DATA"
+
+SELECT MAX CONNECTION
+select min_val, max_val from pg_settings where name='max_connections';
 
 RUN TIMESCALE IN UBUNTU
 https://www.digitalocean.com/community/tutorials/how-to-install-and-use-timescaledb-on-ubuntu-20-04
@@ -102,6 +133,7 @@ ALTER TABLE "EMS_ASSET_ROLE_2" ALTER COLUMN user_id TYPE integer USING (user_id:
 EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
 \copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
 \copy "EMS_HIERARCHY"(asset_id,parent_id,asset_name,description,enabled) FROM 'D:\Work\PLN\EMS_HIERARCHY.csv' DELIMITER ',' CSV HEADER;(IMPORT)
+\copy (SELECT * FROM "EMS_DATA" WHERE "EMS_DATA".time >= '01-01-2021'  AND "EMS_DATA".time <  '01-01-2021'::date + interval '1' DAY AND "EMS_DATA".asset_id = 109 ORDER BY TIME DESC) TO 'D:\Work\PLN\sample.csv' DELIMITER ',' CSV HEADER;
 pg_dump -U postgres -h 192.168.5.216 -p 5432 --table=household_poer_consumption grafana > > dumpFile.sql
 
 RUN SQL QUERY IN REMOTE SERVER
