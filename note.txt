@@ -1,3 +1,10 @@
+DELETE DUPLICATE WITHOUT UNIQUE CONSTRAINT
+DELETE FROM "test" a
+USING "test" b
+WHERE a.ctid < b.ctid
+AND a.a = b.a
+AND a.b = b.b;
+
 CREATE TABLE WITH REFERENCED TABLE AND PRIMARY KEY
 CREATE TABLE products (
     product_no integer PRIMARY KEY,
@@ -23,7 +30,8 @@ alter table "EMS_ASSET" drop constraint "EMS_ASSET_pkey";
 alter table "EMS_ASSET" add constraint "EMS_ASSET_pkey" primary key (asset_id, customer_type);
 
 REFERENCE FK TO ANOTHER TABLE
-ALTER TABLE "EMS_BILL_MONTHLY" ADD CONSTRAINT "fk_ems_bill" FOREIGN KEY (asset_id) REFERENCES public."EMS_ASSET" (asset_id) MATCH FULL;
+ALTER TABLE "EMS_ASSET_ROLE" ADD CONSTRAINT "fk_ems_asset_role" FOREIGN KEY (asset_id) REFERENCES public."EMS_ASSET" (asset_id) MATCH FULL,
+							 ADD CONSTRAINT "fk_ems_asset_role2" FOREIGN KEY (role_id) REFERENCES public."EMS_ROLE" (role_id) MATCH FULL;
 
 
 SET TIMEZONE POSTGRES
