@@ -1,3 +1,35 @@
+CREATE TABLE WITH REFERENCED TABLE AND PRIMARY KEY
+CREATE TABLE products (
+    product_no integer PRIMARY KEY,
+    name text,
+    price numeric
+);
+
+CREATE TABLE orders (
+    order_id integer PRIMARY KEY,
+    shipping_address text,
+    ...
+);
+
+CREATE TABLE order_items (
+    product_no integer REFERENCES products,
+    order_id integer REFERENCES orders,
+    quantity integer,
+    PRIMARY KEY (product_no, order_id)
+);
+
+ADD CONSTRAINT COMPOSITE PK 
+alter table "EMS_ASSET" drop constraint "EMS_ASSET_pkey";	
+alter table "EMS_ASSET" add constraint "EMS_ASSET_pkey" primary key (asset_id, customer_type);
+
+REFERENCE FK TO ANOTHER TABLE
+ALTER TABLE "EMS_BILL_MONTHLY" ADD CONSTRAINT "fk_ems_bill" FOREIGN KEY (asset_id) REFERENCES public."EMS_ASSET" (asset_id) MATCH FULL;
+
+
+SET TIMEZONE POSTGRES
+SHOW TIMEZONE
+SET TIMEZONE='Asia/Jakarta';
+
 ORDER BY MONTH_NAME POSTGRES
 select
 CASE WHEN a.month_no  = '01' then 'January'
@@ -134,6 +166,7 @@ EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
 \copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
 \copy "EMS_HIERARCHY"(asset_id,parent_id,asset_name,description,enabled) FROM 'D:\Work\PLN\EMS_HIERARCHY.csv' DELIMITER ',' CSV HEADER;(IMPORT)
 \copy (SELECT * FROM "EMS_DATA" WHERE "EMS_DATA".time >= '01-01-2021'  AND "EMS_DATA".time <  '01-01-2021'::date + interval '1' DAY AND "EMS_DATA".asset_id = 109 ORDER BY TIME DESC) TO 'D:\Work\PLN\sample.csv' DELIMITER ',' CSV HEADER;
+\copy "EMS_ASSET" FROM 'D:\Work\PLN\EMS_ASSET.csv' DELIMITER ',' CSV HEADER;(IMPORT)
 pg_dump -U postgres -h 192.168.5.216 -p 5432 --table=household_poer_consumption grafana > > dumpFile.sql
 
 RUN SQL QUERY IN REMOTE SERVER
