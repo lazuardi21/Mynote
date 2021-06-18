@@ -1,4 +1,37 @@
+SQL SERVER
+
+ WITH CTE AS( SELECT [ID], [DATE_STAMP], [IDREFPELANGGAN], [HOUR_NUM], [CLUSTER_NUM], [FDVC_NORMALIZED], [AREA_ID], RN = ROW_NUMBER()OVER(PARTITION BY [DATE_STAMP], [IDREFPELANGGAN], [HOUR_NUM], [CLUSTER_NUM], [AREA_ID] ORDER BY [ID]) FROM  [NIMO].[dbo].[PL_CUSTOMER_CLUSTER] ) SELECT * FROM CTE WHERE RN > 1 
+ 
+ WITH CTE AS( SELECT [ID], [DATE_STAMP], [IDREFPELANGGAN], [HOUR_NUM], [CLUSTER_NUM], [FDVC_NORMALIZED], [AREA_ID], RN = ROW_NUMBER()OVER(PARTITION BY [DATE_STAMP], [IDREFPELANGGAN], [HOUR_NUM], [CLUSTER_NUM], [AREA_ID] ORDER BY [ID]) FROM  [NIMO].[dbo].[PL_CUSTOMER_CLUSTER] ) DELETE FROM CTE WHERE RN > 1
+
+
+CREATE CONTINUES AGGREGATE
+
+CREATE VIEW "VW_EMS_DATA_HOURLY"
+WITH (timescaledb.continuous) AS
+SELECT "EMS_DATA".asset_id,
+    time_bucket('01:00:00'::interval, "EMS_DATA"."time") AS timec,
+    avg("EMS_DATA".voltage_volt) AS voltage_volt,
+    avg("EMS_DATA".current_ampere) AS current_ampere,
+    avg("EMS_DATA".frequency_hz) AS frequency_hz,
+    avg("EMS_DATA".power_factor) AS power_factor,
+    avg("EMS_DATA".power_kwatt) AS power_kwatt,
+    max("EMS_DATA".energy_kwh) - min("EMS_DATA".energy_kwh) AS energy_kwh
+   FROM "EMS_DATA"
+  --WHERE "EMS_DATA"."time" >= COALESCE(_timescaledb_internal.to_timestamp_without_timezone(_timescaledb_internal.cagg_watermark('9'::oid)), '-infinity'::timestamp without time zone)
+  GROUP BY "EMS_DATA".asset_id, (time_bucket('01:00:00'::interval, "EMS_DATA"."time"));
+  
+
 DELETE DUPLICATE WITHOUT UNIQUE CONSTRAINT
+
+select * from (
+  SELECT asset_id, time ,
+  ROW_NUMBER() OVER(PARTITION BY  asset_id, time   ORDER BY  asset_id, time  asc) AS Row
+  FROM "EMS_DATA" 
+) dups
+where 
+dups.Row > 1
+
 DELETE FROM "test" a
 USING "test" b
 WHERE a.ctid < b.ctid
