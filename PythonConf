@@ -1,0 +1,5 @@
+HOW TO INSTALL FBPROPHET CORRECTLY
+
+open anaconda terminal with admin privilege
+conda install -c conda-forge fbprophet -y
+conda install -c conda-forge pystan=2.19.1.1 -y
