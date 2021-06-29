@@ -1,0 +1,187 @@
+
+CREATE CONTINUES AGGREGATE
+
+CREATE VIEW "VW_EMS_DATA_HOURLY"
+WITH (timescaledb.continuous) AS
+SELECT "EMS_DATA".asset_id,
+    time_bucket('01:00:00'::interval, "EMS_DATA"."time") AS timec,
+    avg("EMS_DATA".voltage_volt) AS voltage_volt,
+    avg("EMS_DATA".current_ampere) AS current_ampere,
+    avg("EMS_DATA".frequency_hz) AS frequency_hz,
+    avg("EMS_DATA".power_factor) AS power_factor,
+    avg("EMS_DATA".power_kwatt) AS power_kwatt,
+    max("EMS_DATA".energy_kwh) - min("EMS_DATA".energy_kwh) AS energy_kwh
+   FROM "EMS_DATA"
+  --WHERE "EMS_DATA"."time" >= COALESCE(_timescaledb_internal.to_timestamp_without_timezone(_timescaledb_internal.cagg_watermark('9'::oid)), '-infinity'::timestamp without time zone)
+  GROUP BY "EMS_DATA".asset_id, (time_bucket('01:00:00'::interval, "EMS_DATA"."time"));
+  
+
+DELETE DUPLICATE WITHOUT UNIQUE CONSTRAINT
+
+select * from (
+  SELECT asset_id, time ,
+  ROW_NUMBER() OVER(PARTITION BY  asset_id, time   ORDER BY  asset_id, time  asc) AS Row
+  FROM "EMS_DATA" 
+) dups
+where 
+dups.Row > 1
+
+DELETE FROM "test" a
+USING "test" b
+WHERE a.ctid < b.ctid
+AND a.a = b.a
+AND a.b = b.b;
+
+CREATE TABLE WITH REFERENCED TABLE AND PRIMARY KEY
+CREATE TABLE products (
+    product_no integer PRIMARY KEY,
+    name text,
+    price numeric
+);
+
+CREATE TABLE orders (
+    order_id integer PRIMARY KEY,
+    shipping_address text,
+    ...
+);
+
+CREATE TABLE order_items (
+    product_no integer REFERENCES products,
+    order_id integer REFERENCES orders,
+    quantity integer,
+    PRIMARY KEY (product_no, order_id)
+);
+
+ADD CONSTRAINT COMPOSITE PK 
+alter table "EMS_ASSET" drop constraint "EMS_ASSET_pkey";	
+alter table "EMS_ASSET" add constraint "EMS_ASSET_pkey" primary key (asset_id, customer_type);
+
+REFERENCE FK TO ANOTHER TABLE
+ALTER TABLE "EMS_ASSET_ROLE" ADD CONSTRAINT "fk_ems_asset_role" FOREIGN KEY (asset_id) REFERENCES public."EMS_ASSET" (asset_id) MATCH FULL,
+							 ADD CONSTRAINT "fk_ems_asset_role2" FOREIGN KEY (role_id) REFERENCES public."EMS_ROLE" (role_id) MATCH FULL;
+
+
+SET TIMEZONE POSTGRES
+SHOW TIMEZONE
+SET TIMEZONE='Asia/Jakarta';
+
+ORDER BY MONTH_NAME POSTGRES
+select
+CASE WHEN a.month_no  = '01' then 'January'
+				     WHEN a.month_no = '02' then 'February'
+					 WHEN a.month_no = '03' then 'March' end
+					 AS month_no 
+from
+(select distinct CASE WHEN to_char(to_date(month, 'Mon'), 'mm') = '01' then '01'
+				     WHEN to_char(to_date(month, 'Mon'), 'mm') = '02' then '02'
+					 WHEN to_char(to_date(month, 'Mon'), 'mm') = '03' then '03' end
+					 AS month_no 
+from "EMS_DATA_DETAIL"
+order by 1
+)a
+
+BACKUP POSTGRESQL DATABASE
+pg_dump -h 192.168.5.216 -p 5432 -U postgres -F c -b -v -f "D:\Work\PLN\Backup\backup.sql" grafana
+
+RESTORE POSTGRESQL DATABASE
+pg_restore -h 192.168.5.190 -p 5432 -U postgres -d grafana -v "D:\Work\PLN\Backup\backup.sql"
+
+CONVERT TO HYPERTABLE 
+CREATE TABLE conditions3 (
+  time        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  device_id   TEXT,
+  temperature  NUMERIC,
+  humidity     NUMERIC
+);
+CREATE TABLE EMS_DATA3 (
+  time        TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  asset_id   NUMERIC,
+  voltage_volt  NUMERIC,
+  current_ampere   NUMERIC,
+  frequency_hz  NUMERIC,
+  power_factor   NUMERIC,
+  power_kwatt  NUMERIC,
+  energy_kwh     NUMERIC
+);
+SELECT create_hypertable('conditions4', 'time');
+SELECT create_hypertable('EMS_DATA', 'time');
+
+COPY PASTE IN POSTGRES
+INSERT INTO "EMS_DATA2" ("time", asset_id, voltage_volt, current_ampere, frequency_hz, power_factor, power_kwatt, energy_kwh)
+SELECT "time", asset_id, voltage_volt, current_ampere, frequency_hz, power_factor, power_kwatt, energy_kwh FROM "EMS_DATA"
+
+SELECT MAX CONNECTION
+select min_val, max_val from pg_settings where name='max_connections';
+
+RUN TIMESCALE IN UBUNTU
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-timescaledb-on-ubuntu-20-04
+sudo ufw status verbose
+
+
+
+
+configure VIM
+https://askubuntu.com/questions/50621/cannot-connect-to-postgresql-on-port-5432
+sudo nano /etc/postgresql/12/main/pg_hba.conf OR sudo vim /etc/postgresql/12/main/pg_hba.conf 
+sudo nano /etc/postgresql/12/main/postgresql.conf OR sudo vim /etc/postgresql/12/main/postgresql.conf
+
+RUN TIMESCALE DB IN DOCKER (CMD)
+docker pull timescale/timescaledb:latest-pg12
+docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=1m4dm1n timescale/timescaledb:latest-pg12
+
+CHECK 
+docker ps
+
+RUN POSTGRES IN DOCKER (CMD)
+docker run --name postgres -e POSTGRES_PASSWORD=1m4dm1n -d postgres
+
+MAKE A DB IN DOCKER (CLI DOCKER)
+createdb -U postgres mydb
+
+$ docker exec -ti [db-container] bash
+$ su postgres
+$ psql
+
+START AND STOP POSTGRES
+docker stop postgres1
+docker start postgres1
+
+
+QUERY MASS UPLOAD FROM EXCEL TO POSTGRES
+=CONCATENATE("INSERT INTO ""PLN_Data""(""time"",""asset_id"",""voltage_volt"",""current_ampere"",""frequency_hz"",""power_factor"",""power_kwatt"",""energy_kwh"") VALUES(","'",H2,"'",",","'",G2,"'",",","'",A2,"'",",","'",B2,"'",",","'",C2,"'",",","'",D2,"'",",","'",E2,"'",",","'",F2,"'",");")
+
+
+COPY PASTE TABLE IN POSTGRES
+CREATE TABLE "EMS_ASSET_ROLE_2" AS TABLE "EMS_ASSET_ROLE" WITH NO DATA;
+
+CHANGE TYPE VARCHAR TO INT POSTGRES
+ALTER TABLE "EMS_ASSET_ROLE_2" ALTER COLUMN user_id TYPE integer USING (user_id::integer);
+
+EXPORT FROM DATABASE TO CSV AND VISE VERSA TO POSTGRESQL
+\copy "household_poer_consumption" TO 'D:\Work\PLN\house_test.csv' DELIMITER ',' CSV HEADER; (EXPORT)
+\copy "EMS_HIERARCHY"(asset_id,parent_id,asset_name,description,enabled) FROM 'D:\Work\PLN\EMS_HIERARCHY.csv' DELIMITER ',' CSV HEADER;(IMPORT)
+\copy (SELECT * FROM "EMS_DATA" WHERE "EMS_DATA".time >= '01-01-2021'  AND "EMS_DATA".time <  '01-01-2021'::date + interval '1' DAY AND "EMS_DATA".asset_id = 109 ORDER BY TIME DESC) TO 'D:\Work\PLN\sample.csv' DELIMITER ',' CSV HEADER;
+\copy "EMS_ASSET" FROM 'D:\Work\PLN\EMS_ASSET.csv' DELIMITER ',' CSV HEADER;(IMPORT)
+pg_dump -U postgres -h 192.168.5.216 -p 5432 --table=household_poer_consumption grafana > > dumpFile.sql
+
+RUN SQL QUERY IN REMOTE SERVER
+psql -h 192.168.5.216 -U postgres -d grafana -a -f D:\Work\PLN\PLN_January_2021
+
+ENV AT GOLANG TO CONNECT W POSTGRES
+DBHOST="postgres://postgres:1m4dm1n@192.168.5.216:5432/grafana?sslmode=disable"
+
+CONNECT TO POSTGRES, AT MIDDLEWARE (HANDLERS.GO)
+// Open the connection
+	db, err := sql.Open("postgres", os.Getenv("DBHOST"))
+
+MAKE A TABLE IN POSTGRES
+CREATE TABLE users (
+    userid SERIAL PRIMARY KEY,
+    name TEXT,
+    age INT,
+    location TEXT
+);
+
+
+TO LOGIN POSTGRES IN DIFFERENT COMP
+psql -h 192.168.5.216 -p 5432 -d grafana -U postgres -W
