@@ -1,3 +1,7 @@
+HOW TO DEPLOY WEB SERVER WITH WAITRESS
+
+waitress-serve --host="192.168.5.216" --call 'flaskr:create_app'
+
 HOW TO INSTALL FBPROPHET CORRECTLY
 
 open anaconda terminal with admin privilege
