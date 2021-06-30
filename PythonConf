@@ -1,3 +1,7 @@
+EVERY MAKE A NEW PROJECT ON PYTHON PLEASE DELETE VENV OR ENV SO CREATE AGAIN WITH 
+pip install venv
+python -m venv env
+
 HOW TO DEPLOY WEB SERVER WITH WAITRESS
 
 waitress-serve --host="192.168.5.216" --call 'flaskr:create_app'
@@ -7,3 +11,6 @@ HOW TO INSTALL FBPROPHET CORRECTLY
 open anaconda terminal with admin privilege
 conda install -c conda-forge fbprophet -y
 conda install -c conda-forge pystan=2.19.1.1 -y
+
+DLL load failed while importing _imaging: The specified module could not be found.
+conda install -c conda-forge Pillow
