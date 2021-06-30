@@ -1,0 +1,11 @@
+  CREATE TABLE TAX_PRED (
+    FDATETIME datetime NOT NULL,
+    CUST_ID varchar(255) NOT NULL,
+    CUST_NAME varchar(255),
+    AREANAME varchar(255),
+	FSTREAMID float,
+	FDVC float,
+	FP float,
+    FT float,
+    CONSTRAINT PK_Person PRIMARY KEY (FDATETIME,CUST_ID)
+); 
