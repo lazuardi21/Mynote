@@ -1,16 +1,24 @@
 CREATE TABLE
 
-CREATE TABLE TAX_PRED (
-    FDATETIME datetime NOT NULL,
+CREATE TABLE S_VOLUME_PREDICT (
+    P_ID int  IDENTITY(1,1) NOT NULL,
     CUST_ID varchar(255) NOT NULL,
-    CUST_NAME varchar(255),
-    AREANAME varchar(255),
-	FSTREAMID float,
-	FDVC float,
-	FP float,
-    FT float,
-    CONSTRAINT PK_Person PRIMARY KEY (FDATETIME,CUST_ID)
+	FDATETIME datetime NOT NULL,
+	START_TIME datetime,
+	END_TIME datetime,
+	FDVC_ACTUAL float,
+	FDVC_PREDICTED float,
+    FT_ACTUAL float,
+	FT_PREDICTED float,
+	FP_ACTUAL float,
+    FP_PREDICTED float,
+	PREDICTION BIT,
+    CREATED_AT datetime NOT NULL,
+    MODIFIED_BY varchar(255)
+	
+    CONSTRAINT PK_Volume_Predict PRIMARY KEY (P_ID,CUST_ID)
 ); 
+
 
 DELETE DUPLICATE
 
