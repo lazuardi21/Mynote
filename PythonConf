@@ -14,3 +14,6 @@ conda install -c conda-forge pystan=2.19.1.1 -y
 
 DLL load failed while importing _imaging: The specified module could not be found.
 conda install -c conda-forge Pillow
+
+MAKE A FORECAST WITHOUT HISTORY 
+ def make_future_dataframe(self, periods, freq='D', include_history=True):
