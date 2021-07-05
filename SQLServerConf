@@ -45,3 +45,21 @@ SUM HOURLY TO DAILY
 		GROUP BY Convert(char(8), [FDATETIME], 112),[AREANAME], CUST_ID, CUST_NAME, AREA_ID, FSTREAMID
 		--, [CUST_ID], [FDATETIME], AREANAME,
         order by [CUST_ID], Convert(char(8), [FDATETIME], 112)
+
+CONVERT YYYYMMDD TO YYYY-MM-DD 
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT TOP (1000) CAST(
+            CAST(
+                CAST(DATETIME as int) 
+            as char(8)) 
+        as date)
+      ,[AREANAME]
+      ,[CUST_ID]
+      ,[CUST_NAME]
+      ,[AREA_ID]
+      ,[FSTREAMID]
+      ,[FDVC]
+      ,[FP]
+      ,[FT]
+  FROM [SIPG].[dbo].[VW_AMR_DETAIL_DAILY]
+   order by [CUST_ID], [DATETIME]
