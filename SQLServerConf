@@ -26,3 +26,22 @@ DELETE DUPLICATE
  
  WITH CTE AS( SELECT [ID], [DATE_STAMP], [IDREFPELANGGAN], [HOUR_NUM], [CLUSTER_NUM], [FDVC_NORMALIZED], [AREA_ID], RN = ROW_NUMBER()OVER(PARTITION BY [DATE_STAMP], [IDREFPELANGGAN], [HOUR_NUM], [CLUSTER_NUM], [AREA_ID] ORDER BY [ID]) FROM  [NIMO].[dbo].[PL_CUSTOMER_CLUSTER] ) DELETE FROM CTE WHERE RN > 1
 
+SUM HOURLY TO DAILY
+	SELECT TOP (1000) Convert(char(8), [FDATETIME], 112)
+            ,[AREANAME]
+            ,[CUST_ID]
+            ,[CUST_NAME]
+            ,[AREA_ID]
+            ,[FSTREAMID]
+            ,avg([FDVC])
+            ,avg([FP])
+            ,avg([FT])
+        FROM [SIPG].[dbo].[VW_AMR_DETAIL]
+        where 
+		CUST_ID LIKE '%0110025451%'
+		--cust_name like '%INDOLAKTO FACTORY JAKARTA, PT%'
+		and fdatetime >= '2020-01-01 00:00:00'
+		and fdatetime <  '2020-02-01 00:00:00' 
+		GROUP BY Convert(char(8), [FDATETIME], 112),[AREANAME], CUST_ID, CUST_NAME, AREA_ID, FSTREAMID
+		--, [CUST_ID], [FDATETIME], AREANAME,
+        order by [CUST_ID], Convert(char(8), [FDATETIME], 112)
