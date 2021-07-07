@@ -1,3 +1,5 @@
+TO SEE THE PORT IS BUSY OR NOT
+netstat -na|findstr 8080
 
 REDIRECT TO ANOTHER PAGE
 <form action="http://192.168.5.208:8080/">
