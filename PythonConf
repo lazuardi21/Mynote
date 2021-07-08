@@ -17,3 +17,6 @@ conda install -c conda-forge Pillow
 
 MAKE A FORECAST WITHOUT HISTORY 
  def make_future_dataframe(self, periods, freq='D', include_history=True):
+
+CONVERT NUMPYNDARRAY TO CSV
+np.savetxt(r'E:/NIMO/data2.csv',model_fit_3.model.endog,delimiter=',', fmt=('%f'))
