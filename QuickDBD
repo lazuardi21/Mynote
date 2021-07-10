@@ -1,0 +1,135 @@
+https://app.quickdatabasediagrams.com/#/d/g6kJNG
+
+# Modify this code to update the DB schema diagram.
+# To reset the sample schema, replace everything with
+# two dots ('..' - without quotes).
+
+EMS_ASSET
+-
+asset_id PK int
+customer_type int FK >- EMS_CUSTOMER_TYPE.c_type_id
+name NULL string 
+description NULL string
+customer_id NULL string
+address NULL string
+phone NULL string
+
+EMS_CUSTOMER_TYPE
+-
+c_type_id int PK 
+name NULL string 
+description NULL string
+class_rate NULL string
+power_limit NULL float
+load_cost NULL float
+wbp_rate NULL float
+lwbp_rate NULL float
+kvarh_rate NULL float
+min_lwbp NULL float
+
+EMS_BILL_MONTHLY
+-
+asset_id int FK >- EMS_ASSET.asset_id PK
+date_stamp datetime PK
+lwbp_start NULL float 
+lwbp_end NULL float
+wbp_start NULL float
+wbp_end NULL float
+kvarh_start NULL float
+kvarh_end NULL float
+
+EMS_ASSET_ROLE
+-
+asset_id  int FK >- EMS_ASSET.asset_id PK
+role_id int FK >- EMS_ROLE.role_id PK
+description NULL string 
+enabled NULL int
+
+EMS_ROLE
+-
+role_id int PK 
+name NULL string 
+description NULL string 
+enabled NULL int
+
+EMS_HIERARCHY
+-
+asset_id  int FK >- EMS_ASSET.asset_id PK
+parent_id NULL string 
+asset_name NULL string 
+description NULL string 
+enabled NULL int
+
+EMS_THRESHOLD
+-
+meter_id int PK 
+asset_id  int FK >- EMS_ASSET.asset_id PK
+threshold NULL float
+lower_better NULL int
+
+EMS_USER
+-
+name NULL string PK
+role_id int FK >- EMS_ROLE.role_id PK
+lower_better NULL int
+
+EMS_DATA
+-
+time datetime PK
+asset_id  int FK >- EMS_ASSET.asset_id PK
+voltage_volt float 
+current_ampere float 
+frequency_hz float
+power_factor float
+power_kwatt float
+energy_kwh float
+
+"EMS_DATA_PHASE"
+-
+time datetime PK
+asset_id  int FK >- EMS_ASSET.asset_id PK
+signed_real_energy_consumption float
+apparent_energy_consumption float
+signed_reactive_energy_consumption float
+real_power_total float
+apparent_power_total float
+reactive_power_total float
+power_factor_total float
+voltage_ll_3p_average float
+voltage_ln_3p_average float
+current_3p_average float
+frequency float
+current_a float
+current_b float
+current_c float
+current_n float
+voltage_ab float
+voltage_bc float
+voltage_ca float
+voltage_an float
+voltage_bn float
+voltage_cn float
+real_power_a float
+real_power_b float
+real_power_c float
+apparent_power_a float
+apparent_power_b float
+apparent_power_c float
+reactive_power_a float
+reactive_power_b float
+reactive_power_c float
+current_a_thd float
+current_b_thd float
+current_c_thd float
+voltage_an_thd float
+voltage_bn_thd float
+voltage_cn_thd float
+voltage_ab_thd float
+voltage_bc_thd float
+voltage_ca_thd float
+
+
+
+
+
+
