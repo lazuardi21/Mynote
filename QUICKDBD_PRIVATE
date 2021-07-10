@@ -1,0 +1,63 @@
+# Modify this code to update the DB schema diagram.
+# To reset the sample schema, replace everything with
+# two dots ('..' - without quotes).
+
+LOGIN
+-
+user_id PK int
+name string 
+email string PK
+contact_num NULL string
+address NULL string
+city NULLstring
+role NULL string
+Password string
+image NULL string
+dob  NULL date
+gender NULL string
+matpel NULL STRING
+session NULL int
+class NULL int FK >- RATE_PRIVATE.class
+create_at NULL datetime 
+updated_at NULL datetime
+
+
+RATE_PRIVATE
+-
+class int PK 
+rate NULL int 
+
+
+# EMS_BILL_MONTHLY
+# -
+# asset_id int FK >- EMS_ASSET.asset_id PK
+# date_stamp datetime PK
+# lwbp_start NULL float 
+# lwbp_end NULL float
+# wbp_start NULL float
+# wbp_end NULL float
+# kvarh_start NULL float
+# kvarh_end NULL float
+
+# EMS_ASSET_ROLE
+# -
+# asset_id  int FK >- EMS_ASSET.asset_id PK
+# role_id int FK >- EMS_ROLE.role_id PK
+# description NULL string 
+# enabled NULL int
+
+# EMS_ROLE
+# -
+# role_id int PK 
+# name NULL string 
+# description NULL string 
+# enabled NULL int
+
+# EMS_HIERARCHY
+# -
+# asset_id  int FK >- EMS_ASSET.asset_id PK
+# parent_id NULL string 
+# asset_name NULL string 
+# description NULL string 
+# enabled NULL int
+
