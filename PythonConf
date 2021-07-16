@@ -1,3 +1,7 @@
+MAKE A NEW DATAFRAME WITH 2 COLUMN AND ASSIGN WITH INDEX
+
+dfk = DataFrame(list(zip(df['FDATETIME'].to_list(),df['FDVC'].to_list())), columns=['FDATETIME', 'FDVC'], index=df['FDATETIME'] )
+
 DOWNLOAD FROM GITHUB 
 
 !wget --no-check-certificate https://raw.githubusercontent.com/nachi-hebbar/Time-Series-Forecasting-LSTM/main/monthly_milk_production.csv -O /tmp/monthly_milk_production.csv
