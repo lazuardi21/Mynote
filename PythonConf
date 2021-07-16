@@ -1,3 +1,6 @@
+CONVERT IPYNB TO PY
+jupyter nbconvert --to script *.ipynb
+
 EVERY MAKE A NEW PROJECT ON PYTHON PLEASE DELETE VENV OR ENV SO CREATE AGAIN WITH 
 pip install venv
 python -m venv env
