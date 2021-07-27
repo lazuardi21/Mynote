@@ -4,8 +4,8 @@ dfk = DataFrame(list(zip(df['FDATETIME'].to_list(),df['FDVC'].to_list())), colum
 
 DOWNLOAD FROM GITHUB 
 
-!wget --no-check-certificate https://raw.githubusercontent.com/nachi-hebbar/Time-Series-Forecasting-LSTM/main/monthly_milk_production.csv -O /tmp/monthly_milk_production.csv
-df = pd.read_csv('/tmp/monthly_milk_production.csv', index_col=0)
+!wget --no-check-certificate https://raw.githubusercontent.com/lazuardi21/source_data/main/export_dataframe_stationer.csv -O /tmp/hourly_gas_production.csv
+df = pd.read_csv('/tmp/hourly_gas_production.csv', index_col=0)
 df.head()
 
 CONVERT IPYNB TO PY
